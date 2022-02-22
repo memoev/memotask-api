@@ -15,8 +15,12 @@ describe('task', () => {
     description: "Fake Description for Test"
   };
 
+  const badTaskInput = {
+    description: null,
+  }
+
   describe('post task api', () => {
-    describe('given the task got created', () => {
+    describe('when creating a task with description', () => {
       it('should return a 200', async () => {
         const createTaskServiceMock = jest
           .spyOn(TaskService, 'createTask')
@@ -31,5 +35,33 @@ describe('task', () => {
         expect(statusCode).toBe(200);
       });
     });
+    describe('when service is throwing error', () => {
+      it('should return a 409', async () => {
+      const createTaskServiceMock = jest
+        .spyOn(TaskService, 'createTask')
+        .mockRejectedValueOnce(Error);
+
+      const { statusCode } = await supertest(app)
+        .post('/api/tasks')
+        .send(taskInput);
+
+      expect(createTaskServiceMock).toHaveBeenCalled();
+      expect(statusCode).toBe(409);
+      })
+    })
+    describe('when passing invalid task description', () => {
+      it('should return a 400', async () => {
+      const createTaskServiceMock = jest
+        .spyOn(TaskService, 'createTask')
+        .mockRejectedValueOnce(taskPayload);
+
+      const { statusCode } = await supertest(app)
+        .post('/api/tasks')
+        .send(badTaskInput);
+
+      expect(createTaskServiceMock).not.toHaveBeenCalled();
+      expect(statusCode).toBe(400);
+      })
+    })
   });
 });
