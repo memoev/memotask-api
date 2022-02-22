@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { AnyZodObject } from "zod";
+import { AnyZodObject, ZodAny, ZodError } from "zod";
+import log from "../utils/logger";
 
 const validateResource = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -10,6 +11,11 @@ const validateResource = (schema: AnyZodObject) => (req: Request, res: Response,
     });
     next();
   } catch (error: any) {
+    log.error(`There's been an error in %s with code %s - %s`,
+      validateResource.name,
+      error.errors[0].code,
+      error.errors[0].message
+    );
     return res.status(400).send(error.errors);
   }
 };
