@@ -9,6 +9,14 @@ const getAllTasks = async () => {
   }
 }
 
+const getTaskById = async (input : String) => {
+  try {
+    return await TaskModel.findById(input);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 const createTask = async (input: DocumentDefinition<Omit<TaskDocument, 'completed' | 'createdAt' | 'updatedAt'>>) => {
   try {
     return await TaskModel.create(input);
@@ -19,5 +27,6 @@ const createTask = async (input: DocumentDefinition<Omit<TaskDocument, 'complete
 
 export {
   getAllTasks,
+  getTaskById,
   createTask,
 }

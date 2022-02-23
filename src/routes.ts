@@ -1,7 +1,7 @@
 import { Express, Request, Response, NextFunction } from "express";
-import { getAllTaskHandler, createTaskHandler } from "./controllers/task.controller";
+import { getAllTaskHandler, createTaskHandler, getTaskByIdHandler } from "./controllers/task.controller";
 import validateResource from "./middleware/validateResource";
-import { createTaskSchema } from "./schema/task.schema";
+import { createTaskSchema, getTaskSchema } from "./schema/task.schema";
 
 const routes = (app: Express) => {
   app.get('/healthcheck', (req: Request, res: Response, next: NextFunction) => {
@@ -9,6 +9,8 @@ const routes = (app: Express) => {
   });
 
   app.get('/api/tasks', getAllTaskHandler);
+
+  app.get('/api/tasks/:_id', validateResource(getTaskSchema), getTaskByIdHandler);
 
   app.post('/api/tasks', validateResource(createTaskSchema), createTaskHandler);
 }

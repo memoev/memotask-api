@@ -1,4 +1,4 @@
-import { boolean, object, string, TypeOf } from "zod";
+import { object, string, TypeOf } from "zod";
 
 export const createTaskSchema = object({
   body: object({
@@ -8,4 +8,13 @@ export const createTaskSchema = object({
   })
 })
 
+export const getTaskSchema = object({
+  params: object({
+    _id: string({
+      required_error: 'ID is required.'
+    })
+  })
+})
+
 export type CreateTaskInput = Omit<TypeOf<typeof createTaskSchema>, 'createdAt' | 'updatedAt | completed'>;
+export type GetTaskInput = TypeOf<typeof getTaskSchema>;
