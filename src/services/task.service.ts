@@ -1,6 +1,14 @@
 import { DocumentDefinition } from 'mongoose';
 import TaskModel, { TaskDocument } from '../models/task.models';
 
+const getAllTasks = async () => {
+  try {
+    return await TaskModel.find();
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 const createTask = async (input: DocumentDefinition<Omit<TaskDocument, 'completed' | 'createdAt' | 'updatedAt'>>) => {
   try {
     return await TaskModel.create(input);
@@ -10,5 +18,6 @@ const createTask = async (input: DocumentDefinition<Omit<TaskDocument, 'complete
 }
 
 export {
+  getAllTasks,
   createTask,
 }
