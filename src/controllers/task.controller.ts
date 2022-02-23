@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CreateTaskInput, GetTaskInput } from "../schema/task.schema";
-import { getAllTasks, getTaskById, createTask } from "../services/task.service";
+import { getAllTasks, getTaskById, createTask, completeTask } from "../services/task.service";
 import log from "../utils/logger";
 
 const getAllTaskHandler = async (req: Request<{}, {}, CreateTaskInput["body"]>, res: Response) => {
@@ -33,8 +33,19 @@ const createTaskHandler = async (req: Request<{}, {}, CreateTaskInput["body"]>, 
   };
 };
 
+const completeTaskByIdHandler = async (req: Request<GetTaskInput["params"]>, res: Response) => {
+  try {
+    const taskId = req.params._id;
+    const newTask = await completeTask(taskId);
+    return res.status(200).send(newTask);
+  } catch (error: any) {
+    return res.status(400).send(error.message);
+  }
+}
+
 export {
   getAllTaskHandler,
   getTaskByIdHandler,
   createTaskHandler,
+  completeTaskByIdHandler,
 };

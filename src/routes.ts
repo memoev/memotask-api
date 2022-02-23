@@ -1,5 +1,10 @@
 import { Express, Request, Response, NextFunction } from "express";
-import { getAllTaskHandler, createTaskHandler, getTaskByIdHandler } from "./controllers/task.controller";
+import { 
+  getAllTaskHandler,
+  createTaskHandler,
+  getTaskByIdHandler,
+  completeTaskByIdHandler,
+} from "./controllers/task.controller";
 import validateResource from "./middleware/validateResource";
 import { createTaskSchema, getTaskSchema } from "./schema/task.schema";
 
@@ -13,6 +18,8 @@ const routes = (app: Express) => {
   app.get('/api/tasks/:_id', validateResource(getTaskSchema), getTaskByIdHandler);
 
   app.post('/api/tasks', validateResource(createTaskSchema), createTaskHandler);
+
+  app.put('/api/tasks/complete/:_id', validateResource(getTaskSchema), completeTaskByIdHandler);
 }
 
 export default routes;

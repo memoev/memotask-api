@@ -25,8 +25,17 @@ const createTask = async (input: DocumentDefinition<Omit<TaskDocument, 'complete
   }
 }
 
+const completeTask = async (input : String) => {
+  try {
+    return await TaskModel.findByIdAndUpdate(input, { completed: true }, { new: true });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 export {
   getAllTasks,
   getTaskById,
   createTask,
+  completeTask,
 }
