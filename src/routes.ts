@@ -3,7 +3,7 @@ import {
   getAllTaskHandler,
   createTaskHandler,
   getTaskByIdHandler,
-  completeTaskByIdHandler,
+  toggleCompletedTaskPropertyByIdHandler,
   updateTaskDescriptionByIdHandler,
   deleteTaskByIdHandler,
 } from "./controllers/task.controller";
@@ -21,7 +21,11 @@ const routes = (app: Express) => {
 
   app.post('/api/tasks', validateResource(createTaskSchema), createTaskHandler);
 
-  app.put('/api/tasks/complete/:_id', validateResource(getTaskSchema), completeTaskByIdHandler);
+  app.put(
+    '/api/tasks/toggle-complete/:_id',
+    validateResource(getTaskSchema),
+    toggleCompletedTaskPropertyByIdHandler
+  );
 
   app.put(
     '/api/tasks/:_id',

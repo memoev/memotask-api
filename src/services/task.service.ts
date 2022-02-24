@@ -33,6 +33,16 @@ const completeTask = async (input : String) => {
   }
 }
 
+const toggleCompletedTaskProperty = async (input : String) => {
+  try {
+    const task: TaskDocument | null =  await TaskModel.findById(input);
+    if (task) task.completed = !task.completed;
+    return await task?.save();
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 const updateTaskDescription = async (
   input : String,
   payload: DocumentDefinition<Omit<TaskDocument, 'completed' | 'createdAt' | 'updatedAt'>>
@@ -57,6 +67,7 @@ export {
   getTaskById,
   createTask,
   completeTask,
+  toggleCompletedTaskProperty,
   updateTaskDescription,
   deleteTask,
 }

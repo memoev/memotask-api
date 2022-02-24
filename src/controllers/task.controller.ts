@@ -4,7 +4,7 @@ import {
   getAllTasks,
   getTaskById,
   createTask,
-  completeTask,
+  toggleCompletedTaskProperty,
   updateTaskDescription,
   deleteTask,
 } from "../services/task.service";
@@ -54,24 +54,24 @@ const createTaskHandler = async (req: Request<{}, {}, CreateTaskInput["body"]>, 
   };
 };
 
-const completeTaskByIdHandler = async (req: Request<GetTaskInput["params"]>, res: Response) => {
+const toggleCompletedTaskPropertyByIdHandler = async (req: Request<GetTaskInput["params"]>, res: Response) => {
   try {
     const taskId = req.params._id;
-    const completedTask = await completeTask(taskId);
+    const completedTask = await toggleCompletedTaskProperty(taskId);
 
     if (!completedTask) {
       log.info(
         'Request for %s could not be completed because id %s was not found',
-        completeTaskByIdHandler.name,
+        toggleCompletedTaskPropertyByIdHandler.name,
         taskId
       );
       return res.status(404).send(`Task with _id ${taskId} was Not Found.`);
     }
 
-    log.info('Task %o has been completed', completedTask);
+    log.info('Completed property for Task %o has been updated', completedTask);
     return res.status(200).send(completedTask);
   } catch (error: any) {
-    log.error('There has been an error in %s: %o', completeTaskByIdHandler.name, error);
+    log.error('There has been an error in %s: %o', toggleCompletedTaskPropertyByIdHandler.name, error);
     return res.status(409).send(error.message);
   }
 }
@@ -128,7 +128,7 @@ export {
   getAllTaskHandler,
   getTaskByIdHandler,
   createTaskHandler,
-  completeTaskByIdHandler,
+  toggleCompletedTaskPropertyByIdHandler,
   updateTaskDescriptionByIdHandler,
   deleteTaskByIdHandler,
 };
