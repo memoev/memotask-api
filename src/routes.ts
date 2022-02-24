@@ -4,6 +4,8 @@ import {
   createTaskHandler,
   getTaskByIdHandler,
   completeTaskByIdHandler,
+  updateTaskDescriptionByIdHandler,
+  deleteTaskByIdHandler,
 } from "./controllers/task.controller";
 import validateResource from "./middleware/validateResource";
 import { createTaskSchema, getTaskSchema } from "./schema/task.schema";
@@ -20,6 +22,14 @@ const routes = (app: Express) => {
   app.post('/api/tasks', validateResource(createTaskSchema), createTaskHandler);
 
   app.put('/api/tasks/complete/:_id', validateResource(getTaskSchema), completeTaskByIdHandler);
+
+  app.put(
+    '/api/tasks/:_id',
+    [validateResource(getTaskSchema),validateResource(createTaskSchema)],
+    updateTaskDescriptionByIdHandler
+  )
+
+  app.delete('/api/tasks/:_id', validateResource(getTaskSchema), deleteTaskByIdHandler);
 }
 
 export default routes;

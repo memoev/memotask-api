@@ -33,9 +33,30 @@ const completeTask = async (input : String) => {
   }
 }
 
+const updateTaskDescription = async (
+  input : String,
+  payload: DocumentDefinition<Omit<TaskDocument, 'completed' | 'createdAt' | 'updatedAt'>>
+) => {
+  try {
+    return await TaskModel.findByIdAndUpdate(input, payload, { new: true })
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
+const deleteTask = async (input: String) => {
+  try {
+    return await TaskModel.findByIdAndDelete(input)
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 export {
   getAllTasks,
   getTaskById,
   createTask,
   completeTask,
+  updateTaskDescription,
+  deleteTask,
 }
